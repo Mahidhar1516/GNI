@@ -7,7 +7,7 @@ export default function SplashScreen() {
     <div className="splash-container">
       <div className="splash-logo">
         <img
-          src="/logo192.png"
+          src="/gnilogo.png"
           alt="App Logo"
           className="splash-image"
         />
