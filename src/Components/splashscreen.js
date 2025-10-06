@@ -1,8 +1,8 @@
 // src/components/SplashScreen.jsx
 import React from "react";
-import "./SplashScreen.css";
+import "./splashscreen.css";
 
-export default function SplashScreen() {
+export default function splashscreen() {
   return (
     <div className="splash-container">
       <div className="splash-logo">
