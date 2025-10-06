@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import SplashScreen from './components/SplashScreen';
+import splashscreen from './Components/splashscreen';
 
 function App() {
   useEffect(() => {
@@ -10,7 +10,7 @@ function App() {
   }, []);
 
   if (showSplash) {
-    return <SplashScreen />;
+    return <splashscreen />;
   }
   return (
     <div className="App">
