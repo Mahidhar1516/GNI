@@ -1,7 +1,17 @@
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import SplashScreen from './components/SplashScreen';
 
 function App() {
+  useEffect(() => {
+    const timer = setTimeout(() => setShowSplash(false), 2500); // 2.5 seconds
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showSplash) {
+    return <SplashScreen />;
+  }
   return (
     <div className="App">
       <header className="App-header">
