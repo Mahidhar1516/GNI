@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { 
-  BookOpen, 
   Calendar, 
-  CheckCircle2, 
-  Clock, 
-  GraduationCap, 
-  LogOut,
+  Wallet, 
+  PartyPopper, 
+  Users,
   Menu,
-  X,
-  FileText,
-  TrendingUp
+  Bell,
+  Home,
+  ClipboardList,
+  BookOpen,
+  MessageCircle,
+  User as UserIcon,
+  ChevronRight,
+  Cloud,
+  RotateCw
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { User } from "@supabase/supabase-js";
@@ -189,238 +189,196 @@ export default function Dashboard() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 shadow-sm">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary shadow-md">
-              <GraduationCap className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl hidden sm:block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              CampX
-            </span>
-          </div>
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  };
 
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 text-sm">
-              <span className="text-muted-foreground">Welcome,</span>
-              <span className="font-semibold text-foreground">{profile?.full_name}</span>
-            </div>
-            <Avatar className="h-9 w-9 border-2 border-primary/20">
-              <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-sm">
-                {profile?.full_name ? getInitials(profile.full_name) : "ST"}
-              </AvatarFallback>
-            </Avatar>
-            <Button variant="ghost" size="icon" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
+  const getCurrentDate = () => {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long' };
+    return new Date().toLocaleDateString('en-US', options);
+  };
+
+  return (
+    <div className="min-h-screen bg-background pb-20">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-card border-b px-4 py-3">
+        <div className="flex items-center justify-between">
+          <Button variant="ghost" size="icon">
+            <Menu className="h-6 w-6" />
+          </Button>
+          <div className="text-2xl font-bold text-destructive">GNI</div>
+          <Button variant="ghost" size="icon">
+            <Bell className="h-6 w-6" />
+          </Button>
         </div>
       </header>
 
-      <main className="container px-4 py-8">
-        {/* Stats Cards */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card className="shadow-card hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Enrolled Courses</CardTitle>
-              <BookOpen className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-primary">{courses.length}</div>
-              <p className="text-xs text-muted-foreground mt-1">Active this semester</p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-card hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Pending Assignments</CardTitle>
-              <FileText className="h-4 w-4 text-warning" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-warning">
-                {assignments.filter(a => !a.submission || a.submission[0]?.status === 'pending').length}
+      <main className="px-4 py-6 space-y-6">
+        {/* Welcome Card */}
+        <Card className="shadow-lg border-0">
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h1 className="text-xl font-semibold mb-1">
+                    Hi {profile?.full_name?.split(' ')[0] || 'Student'},
+                  </h1>
+                  <p className="text-sm text-muted-foreground">
+                    {getGreeting()}, {getCurrentDate()}
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <Cloud className="h-5 w-5" />
+                    <span className="text-lg">25°C</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Partly Cloudy</p>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Due this week</p>
-            </CardContent>
-          </Card>
+              
+              <Button 
+                variant="ghost" 
+                className="w-full justify-between h-auto py-3 px-4 border rounded-lg hover:bg-muted/50"
+              >
+                <span className="text-base font-medium">View Schedule</span>
+                <ChevronRight className="h-5 w-5" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Card className="shadow-card hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Attendance</CardTitle>
-              <CheckCircle2 className="h-4 w-4 text-success" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-success">{attendancePercentage}%</div>
-              <Progress value={attendancePercentage} className="mt-2 h-1" />
-              <p className="text-xs text-muted-foreground mt-1">
-                {attendance.present} of {attendance.total} classes
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-card hover:shadow-md transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">Student ID</CardTitle>
-              <TrendingUp className="h-4 w-4 text-secondary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-secondary">{profile?.student_id}</div>
-              <p className="text-xs text-muted-foreground mt-1">
-                {profile?.department || "Not set"} • Sem {profile?.semester || "-"}
-              </p>
+        {/* Action Centre */}
+        <div>
+          <h2 className="text-sm font-semibold mb-3 text-foreground">ACTION CENTRE</h2>
+          <Card className="bg-foreground text-card shadow-lg border-0">
+            <CardContent className="p-5">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="font-semibold text-base mb-1">
+                    {profile?.semester ? `Year ${Math.ceil(profile.semester / 2)}` : 'III Year'} - Sem {profile?.semester || 'I'} Laboratory Online Feedbak
+                  </h3>
+                  <p className="text-sm text-card/60">04 Feb, 2025 - 19 Apr, 2025</p>
+                </div>
+                <Button variant="link" className="text-primary hover:text-primary/80 p-0 h-auto">
+                  View
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Main Content */}
-        <Tabs defaultValue="courses" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
-            <TabsTrigger value="courses">Courses</TabsTrigger>
-            <TabsTrigger value="assignments">Assignments</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="courses" className="space-y-4">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>My Courses</CardTitle>
-                <CardDescription>Currently enrolled courses for this semester</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {courses.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">No courses enrolled yet</p>
-                ) : (
-                  <div className="space-y-4">
-                    {courses.map((course) => (
-                      <div
-                        key={course.id}
-                        className="flex items-center justify-between p-4 rounded-lg border bg-gradient-card hover:shadow-md transition-all"
-                      >
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="secondary" className="font-mono text-xs">
-                              {course.course_code}
-                            </Badge>
-                            <h3 className="font-semibold">{course.course_name}</h3>
-                          </div>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            Instructor: {course.instructor}
-                          </p>
-                        </div>
-                        <Badge variant="outline" className="ml-4">
-                          {course.credits} Credits
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="assignments" className="space-y-4">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Assignments</CardTitle>
-                <CardDescription>Upcoming and recent assignments</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {assignments.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">No assignments found</p>
-                ) : (
-                  <div className="space-y-4">
-                    {assignments.map((assignment) => {
-                      const submission = assignment.submission?.[0];
-                      const status = submission?.status || 'pending';
-                      const dueDate = new Date(assignment.due_date);
-                      const isOverdue = dueDate < new Date() && status === 'pending';
-
-                      return (
-                        <div
-                          key={assignment.id}
-                          className="flex items-start justify-between p-4 rounded-lg border bg-gradient-card hover:shadow-md transition-all"
-                        >
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-semibold">{assignment.title}</h3>
-                              <Badge className={getStatusColor(status)} variant="outline">
-                                {status}
-                              </Badge>
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                              {assignment.course.course_name} ({assignment.course.course_code})
-                            </p>
-                            <div className="flex items-center gap-4 mt-2 text-sm">
-                              <div className="flex items-center gap-1 text-muted-foreground">
-                                <Calendar className="h-3.5 w-3.5" />
-                                <span className={isOverdue ? "text-destructive font-medium" : ""}>
-                                  Due: {dueDate.toLocaleDateString()}
-                                </span>
-                              </div>
-                              <div className="text-muted-foreground">
-                                Total Marks: {assignment.total_marks}
-                              </div>
-                              {submission?.marks_obtained !== null && (
-                                <Badge variant="outline" className="bg-success/10 text-success border-success/20">
-                                  Score: {submission.marks_obtained}/{assignment.total_marks}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="profile" className="space-y-4">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Profile Information</CardTitle>
-                <CardDescription>Your student profile details</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-20 w-20 border-4 border-primary/20">
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-primary-foreground text-2xl">
-                      {profile?.full_name ? getInitials(profile.full_name) : "ST"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h2 className="text-2xl font-bold">{profile?.full_name}</h2>
-                    <p className="text-muted-foreground">{profile?.email}</p>
-                  </div>
+        {/* Essentials */}
+        <div>
+          <h2 className="text-sm font-semibold mb-3 text-foreground">ESSENTIALS</h2>
+          <div className="grid grid-cols-2 gap-4">
+            {/* Attendance Card */}
+            <Card className="shadow-lg border-0" style={{ backgroundColor: 'hsl(var(--attendance-green))' }}>
+              <CardContent className="p-5">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                     style={{ backgroundColor: 'hsl(var(--attendance-green-fg))' }}>
+                  <Calendar className="h-6 w-6 text-white" />
                 </div>
-
-                <div className="grid gap-4 pt-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="text-sm font-medium text-muted-foreground">Student ID</div>
-                    <div className="text-sm font-semibold">{profile?.student_id}</div>
+                <h3 className="font-semibold text-base mb-3" style={{ color: 'hsl(var(--attendance-green-fg))' }}>
+                  Attendance
+                </h3>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Attendance</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-2xl font-bold" style={{ color: 'hsl(var(--attendance-green-fg))' }}>
+                      {attendancePercentage}%
+                    </p>
+                    <RotateCw className="h-5 w-5" style={{ color: 'hsl(var(--attendance-green-fg))' }} />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="text-sm font-medium text-muted-foreground">Department</div>
-                    <div className="text-sm">{profile?.department || "Not set"}</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="text-sm font-medium text-muted-foreground">Semester</div>
-                    <div className="text-sm">{profile?.semester || "Not set"}</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="text-sm font-medium text-muted-foreground">Attendance Rate</div>
-                    <div className="text-sm font-semibold text-success">{attendancePercentage}%</div>
-                  </div>
+                  <p className="text-xs text-muted-foreground">As on {getCurrentDate()}</p>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+
+            {/* Fee Payments Card */}
+            <Card className="shadow-lg border-0" style={{ backgroundColor: 'hsl(var(--fee-pink))' }}>
+              <CardContent className="p-5">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                     style={{ backgroundColor: 'hsl(var(--fee-pink-fg))' }}>
+                  <Wallet className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-base mb-3" style={{ color: 'hsl(var(--fee-pink-fg))' }}>
+                  Fee Payments
+                </h3>
+                <div className="space-y-1">
+                  <p className="text-sm text-muted-foreground">Dues</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-2xl font-bold" style={{ color: 'hsl(var(--fee-pink-fg))' }}>
+                      INR 0.00
+                    </p>
+                    <RotateCw className="h-5 w-5" style={{ color: 'hsl(var(--fee-pink-fg))' }} />
+                  </div>
+                  <p className="text-xs text-muted-foreground">As on {getCurrentDate()}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Campus Events Card */}
+            <Card className="shadow-lg border-0" style={{ backgroundColor: 'hsl(var(--events-purple))' }}>
+              <CardContent className="p-5">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                     style={{ backgroundColor: 'hsl(var(--events-purple-fg))' }}>
+                  <PartyPopper className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-base" style={{ color: 'hsl(var(--events-purple-fg))' }}>
+                  Campus Events
+                </h3>
+              </CardContent>
+            </Card>
+
+            {/* Campus Clubs Card */}
+            <Card className="shadow-lg border-0" style={{ backgroundColor: 'hsl(var(--clubs-cyan))' }}>
+              <CardContent className="p-5">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                     style={{ backgroundColor: 'hsl(var(--clubs-cyan-fg))' }}>
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-base" style={{ color: 'hsl(var(--clubs-cyan-fg))' }}>
+                  Campus Clubs
+                </h3>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Tools Section - Placeholder for expandable section */}
+        <div>
+          <h2 className="text-sm font-semibold mb-3 text-foreground">TOOLS</h2>
+        </div>
       </main>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-card border-t z-50">
+        <div className="flex items-center justify-around h-16 px-4">
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2 text-primary">
+            <Home className="h-6 w-6 mb-1" />
+            <span className="text-xs">Home</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
+            <ClipboardList className="h-6 w-6 mb-1" />
+            <span className="text-xs">Tasks</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
+            <BookOpen className="h-6 w-6 mb-1" />
+            <span className="text-xs">Courses</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
+            <MessageCircle className="h-6 w-6 mb-1" />
+            <span className="text-xs">Chat</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={handleSignOut}>
+            <UserIcon className="h-6 w-6 mb-1" />
+            <span className="text-xs">Profile</span>
+          </Button>
+        </div>
+      </nav>
     </div>
   );
 }

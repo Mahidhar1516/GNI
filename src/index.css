@@ -45,6 +45,15 @@ All colors MUST be HSL.
     --warning: 38 92% 50%;
     --info: 199 89% 48%;
     
+    --attendance-green: 120 40% 90%;
+    --attendance-green-fg: 120 60% 30%;
+    --fee-pink: 340 70% 92%;
+    --fee-pink-fg: 340 80% 40%;
+    --events-purple: 260 60% 88%;
+    --events-purple-fg: 260 70% 35%;
+    --clubs-cyan: 190 60% 88%;
+    --clubs-cyan-fg: 190 70% 35%;
+    
     --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%), hsl(217 91% 60%));
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(220 14% 98%));
     
