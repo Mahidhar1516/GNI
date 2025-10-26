@@ -8,6 +8,7 @@ import LearningManagement from "./pages/LearningManagement";
 import DigitalNoticeBoard from "./pages/DigitalNoticeBoard";
 import Chats from "./pages/Chats";
 import Profile from "./pages/Profile";
+import Schedule from "./pages/Schedule";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/notice-board" element={<DigitalNoticeBoard />} />
           <Route path="/chats" element={<Chats />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/schedule" element={<Schedule />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -243,6 +243,7 @@ export default function Dashboard() {
               <Button 
                 variant="ghost" 
                 className="w-full justify-between h-auto py-3 px-4 border rounded-lg hover:bg-muted/50"
+                onClick={() => navigate("/schedule")}
               >
                 <span className="text-base font-medium">View Schedule</span>
                 <ChevronRight className="h-5 w-5" />
