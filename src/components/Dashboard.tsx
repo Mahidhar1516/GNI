@@ -10,14 +10,14 @@ import {
   Menu,
   Bell,
   Home,
-  ClipboardList,
   BookOpen,
   MessageCircle,
-  User as UserIcon,
+  User,
   ChevronRight,
   Cloud,
   RotateCw
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import type { User } from "@supabase/supabase-js";
 
@@ -53,40 +53,41 @@ interface Assignment {
 }
 
 export default function Dashboard() {
-  const [user, setUser] = useState<User | null>(null);
+  const [authUser, setAuthUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [attendance, setAttendance] = useState({ present: 0, total: 0 });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      setAuthUser(session?.user ?? null);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setAuthUser(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (user) {
+    if (authUser) {
       fetchProfile();
       fetchCourses();
       fetchAssignments();
       fetchAttendance();
     }
-  }, [user]);
+  }, [authUser]);
 
   const fetchProfile = async () => {
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
-      .eq("id", user?.id)
+      .eq("id", authUser?.id)
       .single();
 
     if (error) {
@@ -108,7 +109,7 @@ export default function Dashboard() {
           credits
         )
       `)
-      .eq("student_id", user?.id)
+      .eq("student_id", authUser?.id)
       .eq("status", "active");
 
     if (error) {
@@ -149,7 +150,7 @@ export default function Dashboard() {
     const { data, error } = await supabase
       .from("attendance")
       .select("status")
-      .eq("student_id", user?.id);
+      .eq("student_id", authUser?.id);
 
     if (error) {
       console.error("Error fetching attendance:", error);
@@ -357,24 +358,24 @@ export default function Dashboard() {
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-card border-t z-50">
         <div className="flex items-center justify-around h-16 px-4">
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2 text-primary">
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2 text-primary" onClick={() => navigate("/")}>
             <Home className="h-6 w-6 mb-1" />
             <span className="text-xs">Home</span>
           </Button>
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
-            <ClipboardList className="h-6 w-6 mb-1" />
-            <span className="text-xs">Tasks</span>
-          </Button>
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/notice-board")}>
             <BookOpen className="h-6 w-6 mb-1" />
-            <span className="text-xs">Courses</span>
+            <span className="text-xs">Notice Board</span>
           </Button>
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2">
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/learning")}>
+            <BookOpen className="h-6 w-6 mb-1" />
+            <span className="text-xs">Learning</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/chats")}>
             <MessageCircle className="h-6 w-6 mb-1" />
-            <span className="text-xs">Chat</span>
+            <span className="text-xs">Chats</span>
           </Button>
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={handleSignOut}>
-            <UserIcon className="h-6 w-6 mb-1" />
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/profile")}>
+            <User className="h-6 w-6 mb-1" />
             <span className="text-xs">Profile</span>
           </Button>
         </div>
