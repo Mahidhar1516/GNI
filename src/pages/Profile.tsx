@@ -15,7 +15,7 @@ interface Profile {
 export default function Profile() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [attendance, setAttendance] = useState({ present: 0, total: 0 });
+  const [attendance, setAttendance] = useState({ present: 100, total: 0 });
   const navigate = useNavigate();
   const { toast } = useToast();
 
