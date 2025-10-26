@@ -12,7 +12,7 @@ import {
   Home,
   BookOpen,
   MessageCircle,
-  User,
+  User as UserIcon,
   ChevronRight,
   Cloud,
   RotateCw
@@ -375,7 +375,7 @@ export default function Dashboard() {
             <span className="text-xs">Chats</span>
           </Button>
           <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/profile")}>
-            <User className="h-6 w-6 mb-1" />
+            <UserIcon className="h-6 w-6 mb-1" />
             <span className="text-xs">Profile</span>
           </Button>
         </div>
