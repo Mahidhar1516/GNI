@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, Calendar as CalendarIcon, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface ScheduleItem {
   id: string;
@@ -15,7 +17,10 @@ interface ScheduleItem {
 
 export default function Schedule() {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState(new Date(2025, 9, 25)); // Oct 25, 2025
+  const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const days = [
     { day: "Thu", date: 23 },
@@ -25,56 +30,67 @@ export default function Schedule() {
     { day: "Mon", date: 27 },
   ];
 
-  const scheduleItems: ScheduleItem[] = [
-    {
-      id: "1",
-      title: "Automata Theory and Compiler Design",
-      startTime: "9:10 AM",
-      endTime: "10:10 AM",
-      type: "class",
-      status: "attended",
-    },
-    {
-      id: "2",
-      title: "Renewal Energy Sources",
-      startTime: "10:10 AM",
-      endTime: "11:10 AM",
-      type: "class",
-      status: "attended",
-    },
-    {
-      id: "3",
-      title: "Embedded Systems Lab (EC208)",
-      startTime: "11:10 AM",
-      endTime: "1:10 PM",
-      type: "others",
-      status: "attended",
-    },
-    {
-      id: "4",
-      title: "Industrial Oriented Mini Project",
-      startTime: "11:10 AM",
-      endTime: "1:10 PM",
-      type: "others",
-      status: "missed",
-    },
-    {
-      id: "5",
-      title: "data mining",
-      startTime: "2:00 PM",
-      endTime: "3:00 PM",
-      type: "class",
-      status: "attended",
-    },
-    {
-      id: "6",
-      title: "Embedded Systems",
-      startTime: "3:00 PM",
-      endTime: "4:00 PM",
-      type: "class",
-      status: "missed",
-    },
-  ];
+  useEffect(() => {
+    fetchSchedule();
+  }, [selectedDate]);
+
+  const fetchSchedule = async () => {
+    try {
+      setLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to view your schedule",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Get day of week (0 = Sunday, 1 = Monday, etc.)
+      const dayOfWeek = selectedDate.getDay();
+
+      const { data, error } = await supabase
+        .from("class_schedule")
+        .select("*")
+        .eq("student_id", user.id)
+        .eq("day_of_week", dayOfWeek)
+        .order("start_time");
+
+      if (error) throw error;
+
+      // Convert database format to display format
+      const formattedItems: ScheduleItem[] = (data || []).map((item) => ({
+        id: item.id,
+        title: item.title,
+        startTime: formatTime(item.start_time),
+        endTime: formatTime(item.end_time),
+        type: item.type as "class" | "others",
+        status: "upcoming" as const, // Default to upcoming; can be enhanced with attendance data
+      }));
+
+      setScheduleItems(formattedItems);
+    } catch (error) {
+      console.error("Error fetching schedule:", error);
+      toast({
+        title: "Error loading schedule",
+        description: "Failed to load your schedule. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatTime = (time: string) => {
+    // Convert 24-hour time to 12-hour format
+    const [hours, minutes] = time.split(":");
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const displayHour = hour % 12 || 12;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
 
   const getStatusIcon = (status: string) => {
     if (status === "attended") {
@@ -130,7 +146,16 @@ export default function Schedule() {
 
       {/* Schedule List */}
       <main className="px-4 py-6 space-y-4">
-        {scheduleItems.map((item) => (
+        {loading ? (
+          <div className="text-center py-8 text-muted-foreground">
+            Loading schedule...
+          </div>
+        ) : scheduleItems.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No classes scheduled for this day
+          </div>
+        ) : (
+          scheduleItems.map((item) => (
           <Card key={item.id} className="shadow-md border-0 overflow-hidden">
             <CardContent className="p-0 flex">
               <div className="flex-1 p-4">
@@ -165,7 +190,8 @@ export default function Schedule() {
               </div>
             </CardContent>
           </Card>
-        ))}
+          ))
+        )}
       </main>
     </div>
   );

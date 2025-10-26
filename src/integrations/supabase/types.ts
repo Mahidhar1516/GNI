@@ -94,6 +94,42 @@ export type Database = {
           },
         ]
       }
+      class_schedule: {
+        Row: {
+          course_id: string | null
+          created_at: string | null
+          day_of_week: number
+          end_time: string
+          id: string
+          start_time: string
+          student_id: string
+          title: string
+          type: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string | null
+          day_of_week: number
+          end_time: string
+          id?: string
+          start_time: string
+          student_id: string
+          title: string
+          type: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string | null
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          start_time?: string
+          student_id?: string
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           course_code: string
