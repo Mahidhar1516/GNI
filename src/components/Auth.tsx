@@ -72,8 +72,8 @@ export default function Auth() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary mb-4 shadow-lg">
             <GraduationCap className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            CampX Student
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-danger to-secondary bg-clip-text text-transparent">
+            GNI Student
           </h1>
           <p className="text-muted-foreground mt-2">Your campus companion</p>
         </div>
