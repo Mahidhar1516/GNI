@@ -163,6 +163,80 @@ export type Database = {
         }
         Relationships: []
       }
+      exam_marks: {
+        Row: {
+          course_id: string
+          created_at: string | null
+          exam_date: string
+          exam_name: string
+          id: string
+          marks_obtained: number
+          student_id: string
+          total_marks: number
+        }
+        Insert: {
+          course_id: string
+          created_at?: string | null
+          exam_date: string
+          exam_name: string
+          id?: string
+          marks_obtained: number
+          student_id: string
+          total_marks: number
+        }
+        Update: {
+          course_id?: string
+          created_at?: string | null
+          exam_date?: string
+          exam_name?: string
+          id?: string
+          marks_obtained?: number
+          student_id?: string
+          total_marks?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_marks_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fee_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          due_date: string
+          id: string
+          payment_date: string
+          status: string
+          student_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          due_date: string
+          id?: string
+          payment_date: string
+          status?: string
+          student_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          due_date?: string
+          id?: string
+          payment_date?: string
+          status?: string
+          student_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
