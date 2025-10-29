@@ -73,7 +73,7 @@ export default function Auth() {
             <GraduationCap className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            CampX Student
+            GNI Student
           </h1>
           <p className="text-muted-foreground mt-2">Your campus companion</p>
         </div>
