@@ -18,11 +18,11 @@ export default function SplashScreen({ onFinish }: SplashScreenProps) {
 
   return (
     <div
-      className={`fixed inset-0 bg-primary flex items-center justify-center z-50 transition-opacity duration-500 ${
+      className={`fixed inset-0 bg-white flex items-center justify-center z-50 transition-opacity duration-500 ${
         fadeOut ? "opacity-0" : "opacity-100"
       }`}
     >
-      <h1 className="text-8xl font-bold text-primary-foreground animate-pulse">
+      <h1 className="text-8xl font-bold text-red-600 animate-pulse">
         GNI
       </h1>
     </div>

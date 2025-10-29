@@ -11,7 +11,7 @@ import {
   Bell,
   Home,
   BookOpen,
-  MessageCircle,
+  Briefcase,
   User as UserIcon,
   ChevronRight,
   Cloud,
@@ -167,6 +167,10 @@ export default function Dashboard() {
       title: "Signed out",
       description: "You have been successfully signed out.",
     });
+    // Restart the app to show splash screen
+    if (typeof window !== 'undefined' && (window as any).restartApp) {
+      (window as any).restartApp();
+    }
   };
 
   const attendancePercentage = attendance.total > 0 
@@ -371,9 +375,9 @@ export default function Dashboard() {
             <BookOpen className="h-6 w-6 mb-1" />
             <span className="text-xs">Learning</span>
           </Button>
-          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/chats")}>
-            <MessageCircle className="h-6 w-6 mb-1" />
-            <span className="text-xs">Chats</span>
+          <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/placements")}>
+            <Briefcase className="h-6 w-6 mb-1" />
+            <span className="text-xs">Placements</span>
           </Button>
           <Button variant="ghost" size="icon" className="flex-col h-auto py-2" onClick={() => navigate("/profile")}>
             <UserIcon className="h-6 w-6 mb-1" />

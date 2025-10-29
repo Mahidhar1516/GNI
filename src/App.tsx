@@ -7,7 +7,7 @@ import { useState } from "react";
 import Index from "./pages/Index";
 import LearningManagement from "./pages/LearningManagement";
 import DigitalNoticeBoard from "./pages/DigitalNoticeBoard";
-import Chats from "./pages/Chats";
+import Placements from "./pages/Placements";
 import Profile from "./pages/Profile";
 import Schedule from "./pages/Schedule";
 import NotFound from "./pages/NotFound";
@@ -17,6 +17,16 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [showSplash, setShowSplash] = useState(true);
+
+  // Function to restart app (show splash screen again)
+  const restartApp = () => {
+    setShowSplash(true);
+  };
+
+  // Make restart function available globally
+  if (typeof window !== 'undefined') {
+    (window as any).restartApp = restartApp;
+  }
 
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
@@ -32,7 +42,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/learning" element={<LearningManagement />} />
             <Route path="/notice-board" element={<DigitalNoticeBoard />} />
-            <Route path="/chats" element={<Chats />} />
+            <Route path="/placements" element={<Placements />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/schedule" element={<Schedule />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
