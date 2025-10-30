@@ -143,22 +143,6 @@ export default function Placements() {
           >
             Applied
           </Button>
-          <Button 
-            size="sm" 
-            variant={activeTab === "hiring" ? "default" : "outline"}
-            onClick={() => setActiveTab("hiring")}
-            className={activeTab === "hiring" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
-          >
-            Hiring Done
-          </Button>
-          <Button 
-            size="sm" 
-            variant={activeTab === "previous" ? "default" : "outline"}
-            onClick={() => setActiveTab("previous")}
-            className={activeTab === "previous" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
-          >
-            Previous Jobs
-          </Button>
         </div>
       </header>
 
