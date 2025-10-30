@@ -27,7 +27,8 @@ interface Job {
   salary: string;
   openings: number;
   applyBy: string;
-  status: "open" | "applied" | "hiring" | "previous";
+  type: "job" | "internship";
+  status: "open" | "applied";
 }
 
 const jobsData: Job[] = [
@@ -40,6 +41,7 @@ const jobsData: Job[] = [
     salary: "₹3L - ₹5L",
     openings: 5,
     applyBy: "30 Oct 25, 10:00 AM",
+    type: "job",
     status: "open"
   },
   {
@@ -51,6 +53,7 @@ const jobsData: Job[] = [
     salary: "₹3L - ₹3.5L",
     openings: 2,
     applyBy: "30 Oct 25, 11:30 AM",
+    type: "internship",
     status: "open"
   },
   {
@@ -62,6 +65,7 @@ const jobsData: Job[] = [
     salary: "₹3L - ₹3.5L",
     openings: 3,
     applyBy: "30 Oct 25, 02:00 PM",
+    type: "job",
     status: "open"
   },
   {
@@ -73,6 +77,7 @@ const jobsData: Job[] = [
     salary: "₹3.6L",
     openings: 2,
     applyBy: "30 Oct 25, 04:00 PM",
+    type: "job",
     status: "open"
   },
   {
@@ -84,6 +89,7 @@ const jobsData: Job[] = [
     salary: "₹3.6L",
     openings: 2,
     applyBy: "30 Oct 25, 04:15 PM",
+    type: "job",
     status: "open"
   },
   {
@@ -95,15 +101,19 @@ const jobsData: Job[] = [
     salary: "₹6L",
     openings: 10,
     applyBy: "30 Oct 25, 06:00 PM",
+    type: "internship",
     status: "open"
   }
 ];
 
 export default function Placements() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("open");
+  const [typeTab, setTypeTab] = useState<"jobs" | "internships">("jobs");
+  const [statusTab, setStatusTab] = useState<"open" | "applied">("open");
 
-  const filteredJobs = jobsData.filter(job => job.status === activeTab);
+  const filteredJobs = jobsData.filter(
+    job => job.type === (typeTab === "jobs" ? "job" : "internship") && job.status === statusTab
+  );
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -115,7 +125,7 @@ export default function Placements() {
         
         
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
+        <Tabs value={typeTab} onValueChange={(value) => setTypeTab(value as "jobs" | "internships")} className="mb-4">
           <TabsList className="bg-white/10 w-full justify-start">
             <TabsTrigger value="jobs" className="data-[state=active]:bg-white data-[state=active]:text-foreground">
               Jobs
@@ -129,17 +139,17 @@ export default function Placements() {
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
           <Button 
             size="sm" 
-            variant={activeTab === "open" ? "default" : "outline"}
-            onClick={() => setActiveTab("open")}
-            className={activeTab === "open" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
+            variant={statusTab === "open" ? "default" : "outline"}
+            onClick={() => setStatusTab("open")}
+            className={statusTab === "open" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
           >
             Open To Apply
           </Button>
           <Button 
             size="sm" 
-            variant={activeTab === "applied" ? "default" : "outline"}
-            onClick={() => setActiveTab("applied")}
-            className={activeTab === "applied" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
+            variant={statusTab === "applied" ? "default" : "outline"}
+            onClick={() => setStatusTab("applied")}
+            className={statusTab === "applied" ? "" : "bg-white/10 text-white border-white/20 hover:bg-white/20"}
           >
             Applied
           </Button>
