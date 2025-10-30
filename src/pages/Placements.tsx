@@ -110,17 +110,7 @@ export default function Placements() {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[hsl(220,40%,15%)] text-white px-4 py-4">
         <div className="flex items-center justify-between mb-4">
-          <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-            <Menu className="h-6 w-6" />
-          </Button>
           <h1 className="text-xl font-semibold">Jobs Board</h1>
-          <div className="flex items-center gap-2">
-            <Flame className="h-5 w-5 text-orange-500" />
-            <span className="text-sm font-semibold">48</span>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-              <Menu className="h-6 w-6" />
-            </Button>
-          </div>
         </div>
         
         
