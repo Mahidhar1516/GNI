@@ -123,9 +123,7 @@ export default function Placements() {
           </div>
         </div>
         
-        <p className="text-sm text-white/70 mb-4">
-          🏢 2000+ Companies Hired CCBPians
-        </p>
+        
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
           <TabsList className="bg-white/10 w-full justify-start">
